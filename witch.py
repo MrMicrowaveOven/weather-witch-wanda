@@ -5,9 +5,9 @@ from time import sleep
 import requests
 import json
 
-YELLOW = 16500
-GREEN = 25500
-BLUE = 46920
+YELLOW = 8000
+# GREEN = 25500
+BLUE = 42000
 
 def get_prob_of_rain():
     r = requests.get(env_vars.weather_url)
@@ -20,9 +20,14 @@ def get_prob_of_rain():
 def continuously_look_for_rain():
     while True:
         prob = get_prob_of_rain()
-        color_int = 30420 * prob + YELLOW
-        # change_color_of_lightbulb
-        sleep(600)
+        print prob
+        color_int = int(32000 * prob + YELLOW)
+        change_color_of_lightbulb(color_int)
+        sleep(6)
 
-
-print continuously_look_for_rain()
+def change_color_of_lightbulb(color_int):
+    print "turning " + str(color_int)
+    r = requests.put(env_vars.HUE_PUT_LINK, json.dumps({"on":True, "sat":254, "bri":254,"hue":color_int}))
+    print r
+    print r.content
+continuously_look_for_rain()
